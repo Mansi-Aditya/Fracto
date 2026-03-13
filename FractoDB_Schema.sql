@@ -1,38 +1,25 @@
--- ================================================
 -- Fracto - Doctor Appointment Booking System
--- Database Schema - Sprint 1
--- ================================================
+-- Database Schema 
 
--- Create Database
+
+
 CREATE DATABASE FractoDB;
 USE FractoDB;
 
--- ================================================
--- Table 1: Specializations
--- Stores the types of doctors (Cardiologist etc)
--- ================================================
 CREATE TABLE Specializations (
     SpecializationId    INT PRIMARY KEY IDENTITY(1,1),
     SpecializationName  NVARCHAR(100) NOT NULL
 );
 
--- ================================================
--- Table 2: Users
--- Stores both normal users and admins
--- ================================================
 CREATE TABLE Users (
     UserId          INT PRIMARY KEY IDENTITY(1,1),
     Username        NVARCHAR(100) NOT NULL,
     Email           NVARCHAR(150) NOT NULL,
     PasswordHash    NVARCHAR(256) NOT NULL,
-    Role            NVARCHAR(20)  NOT NULL,  -- 'User' or 'Admin'
+    Role            NVARCHAR(20)  NOT NULL,  
     ProfileImage    NVARCHAR(300)
 );
 
--- ================================================
--- Table 3: Doctors
--- Stores doctor details
--- ================================================
 CREATE TABLE Doctors (
     DoctorId            INT PRIMARY KEY IDENTITY(1,1),
     Name                NVARCHAR(100) NOT NULL,
@@ -43,25 +30,17 @@ CREATE TABLE Doctors (
     FOREIGN KEY (SpecializationId) REFERENCES Specializations(SpecializationId)
 );
 
--- ================================================
--- Table 4: Appointments
--- Stores all appointment bookings
--- ================================================
 CREATE TABLE Appointments (
     AppointmentId       INT PRIMARY KEY IDENTITY(1,1),
     UserId              INT NOT NULL,
     DoctorId            INT NOT NULL,
     AppointmentDate     DATE NOT NULL,
-    TimeSlot            NVARCHAR(20) NOT NULL,  -- e.g. '10:00 AM'
-    Status              NVARCHAR(20) DEFAULT 'Pending', -- Pending, Confirmed, Cancelled
+    TimeSlot            NVARCHAR(20) NOT NULL, 
+    Status              NVARCHAR(20) DEFAULT 'Pending', 
     FOREIGN KEY (UserId)    REFERENCES Users(UserId),
     FOREIGN KEY (DoctorId)  REFERENCES Doctors(DoctorId)
 );
 
--- ================================================
--- Table 5: Ratings
--- Stores user ratings for doctors
--- ================================================
 CREATE TABLE Ratings (
     RatingId    INT PRIMARY KEY IDENTITY(1,1),
     DoctorId    INT NOT NULL,
@@ -70,10 +49,6 @@ CREATE TABLE Ratings (
     FOREIGN KEY (DoctorId)  REFERENCES Doctors(DoctorId),
     FOREIGN KEY (UserId)    REFERENCES Users(UserId)
 );
-
--- ================================================
--- Sample Data (optional - just to test)
--- ================================================
 
 INSERT INTO Specializations (SpecializationName) VALUES
 ('Cardiologist'),
