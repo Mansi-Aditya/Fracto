@@ -1,28 +1,58 @@
-<div class="container">
-  <h2>Search Doctor</h2>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card p-4">
+        <h3 class="text-center mb-4">Search Doctor</h3>
 
-  <label>City:</label>
-  <select>
-    <option>Mumbai</option>
-    <option>Delhi</option>
-    <option>Bangalore</option>
-  </select>
+        <div class="mb-3">
+          <label>City</label>
+          <input type="text" class="form-control" [(ngModel)]="city" placeholder="Enter city" />
+        </div>
 
-  <br><br>
+        <div class="mb-3">
+          <label>Specialization ID</label>
+          <input type="number" class="form-control" [(ngModel)]="specializationId" placeholder="Enter specialization id" />
+        </div>
 
-  <label>Specialization:</label>
-  <select>
-    <option>Cardiologist</option>
-    <option>Dentist</option>
-    <option>Dermatologist</option>
-  </select>
+        <button class="btn btn-primary w-100" (click)="search()">Search</button>
 
-  <br><br>
+        <p style="color:red" class="mt-2">{{errorMessage()}}</p>
+        <p style="color:green" class="mt-2">{{successMessage()}}</p>
 
-  <label>Date:</label>
-  <input type="date" />
+        <div class="mt-4">
+          @if (doctors().length > 0) {
+            <h5>Available Doctors</h5>
+            @for (doctor of doctors(); track doctor.doctorId) {
+              <div class="card p-3 mb-2">
+                <p class="mb-1"><strong>Name:</strong> {{doctor.name}}</p>
+                <p class="mb-1"><strong>City:</strong> {{doctor.city}}</p>
+                <p class="mb-1"><strong>Rating:</strong> {{doctor.rating}}</p>
+              </div>
+            }
+          }
+        </div>
+      </div>
 
-  <br><br>
+      <div class="card p-4 mt-4">
+        <h3 class="text-center mb-4">Rate a Doctor</h3>
 
-  <button>Search</button>
+        <div class="mb-3">
+          <label>Your User ID</label>
+          <input type="number" class="form-control" [(ngModel)]="ratingUserId" placeholder="Enter your user id" />
+        </div>
+
+        <div class="mb-3">
+          <label>Doctor ID</label>
+          <input type="number" class="form-control" [(ngModel)]="ratingDoctorId" placeholder="Enter doctor id" />
+        </div>
+
+        <div class="mb-3">
+          <label>Rating (1-5)</label>
+          <input type="number" class="form-control" [(ngModel)]="ratingValue" placeholder="Enter rating 1 to 5" min="1" max="5" />
+        </div>
+
+        <button class="btn btn-success w-100" (click)="submitRating()">Submit Rating</button>
+      </div>
+    </div>
+  </div>
 </div>

@@ -1,0 +1,55 @@
+<div style="padding: 20px;">
+  <h3 style="text-align: center; color: #007bff;">Admin Dashboard</h3>
+
+  <p style="color: green;">{{successMessage()}}</p>
+  <p style="color: red;">{{errorMessage()}}</p>
+
+  <h5>All Users</h5>
+  <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
+    <tr style="background: #cce5ff;">
+      <th style="border: 1px solid #ccc; padding: 8px;">ID</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">Username</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">Email</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">Role</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">Action</th>
+    </tr>
+    @for (user of users(); track user.userId) {
+      <tr>
+        <td style="border: 1px solid #ccc; padding: 8px;">{{user.userId}}</td>
+        <td style="border: 1px solid #ccc; padding: 8px;">{{user.username}}</td>
+        <td style="border: 1px solid #ccc; padding: 8px;">{{user.email}}</td>
+        <td style="border: 1px solid #ccc; padding: 8px;">{{user.role}}</td>
+        <td style="border: 1px solid #ccc; padding: 8px;">
+          <button (click)="deleteUser(user.userId)" style="background: red; color: white; border: none; padding: 5px 10px;">Delete</button>
+        </td>
+      </tr>
+    }
+  </table>
+
+  <h5>All Appointments</h5>
+  <table style="width: 100%; border-collapse: collapse;">
+    <tr style="background: #cce5ff;">
+      <th style="border: 1px solid #ccc; padding: 8px;">ID</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">User ID</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">Doctor ID</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">Date</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">Time</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">Status</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">Action</th>
+    </tr>
+    @for (apt of appointments(); track apt.appointmentId) {
+      <tr>
+        <td style="border: 1px solid #ccc; padding: 8px;">{{apt.appointmentId}}</td>
+        <td style="border: 1px solid #ccc; padding: 8px;">{{apt.userId}}</td>
+        <td style="border: 1px solid #ccc; padding: 8px;">{{apt.doctorId}}</td>
+        <td style="border: 1px solid #ccc; padding: 8px;">{{apt.appointmentDate | date}}</td>
+        <td style="border: 1px solid #ccc; padding: 8px;">{{apt.timeSlot}}</td>
+        <td style="border: 1px solid #ccc; padding: 8px;">{{apt.status}}</td>
+        <td style="border: 1px solid #ccc; padding: 8px;">
+          <button (click)="confirmAppointment(apt.appointmentId)" style="background: green; color: white; border: none; padding: 5px 10px; margin-right: 5px;">Confirm</button>
+          <button (click)="cancelAppointment(apt.appointmentId)" style="background: red; color: white; border: none; padding: 5px 10px;">Cancel</button>
+        </td>
+      </tr>
+    }
+  </table>
+</div>
