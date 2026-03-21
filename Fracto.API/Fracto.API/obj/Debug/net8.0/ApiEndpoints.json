@@ -228,6 +228,22 @@
   },
   {
     "ContainingType": "Fracto.API.Controllers.RatingController",
+    "Method": "UpdateRating",
+    "RelativePath": "api/Rating",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "rating",
+        "Type": "Fracto.API.Models.Rating",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Fracto.API.Controllers.RatingController",
     "Method": "GetDoctorRatings",
     "RelativePath": "api/Rating/doctor/{doctorId}",
     "HttpMethod": "GET",

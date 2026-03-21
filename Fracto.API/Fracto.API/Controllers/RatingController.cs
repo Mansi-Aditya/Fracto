@@ -47,6 +47,37 @@ namespace Fracto.API.Controllers
             return Ok("Rating added successfully.");
         }
 
+        [HttpPut]
+        public async Task<IActionResult> UpdateRating(Rating rating)
+        {
+            var existingRating = await _context.Ratings
+                .FirstOrDefaultAsync(r =>
+                    r.UserId == rating.UserId &&
+                    r.DoctorId == rating.DoctorId);
+
+            if (existingRating == null)
+                return NotFound("You have not rated this doctor yet.");
+
+            if (rating.RatingScore < 1 || rating.RatingScore > 5)
+                return BadRequest("Rating must be between 1 and 5.");
+
+            existingRating.RatingScore = rating.RatingScore;
+            await _context.SaveChangesAsync();
+
+            var avgRating = await _context.Ratings
+                .Where(r => r.DoctorId == rating.DoctorId)
+                .AverageAsync(r => r.RatingScore);
+
+            var doctor = await _context.Doctors.FindAsync(rating.DoctorId);
+            if (doctor != null)
+            {
+                doctor.Rating = (decimal)avgRating;
+                await _context.SaveChangesAsync();
+            }
+
+            return Ok("Rating updated successfully.");
+        }
+
         [HttpGet("doctor/{doctorId}")]
         public async Task<IActionResult> GetDoctorRatings(int doctorId)
         {

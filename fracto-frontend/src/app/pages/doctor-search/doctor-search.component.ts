@@ -14,6 +14,7 @@ export class DoctorSearchComponent {
 
   city = '';
   specializationId = 0;
+  minRating = 0;
   doctors = signal<any[]>([]);
   errorMessage = signal('');
   successMessage = signal('');
@@ -30,8 +31,14 @@ export class DoctorSearchComponent {
     this.successMessage.set('');
     this.http.get<any[]>(`${this.apiUrl}/Doctor/search?city=${this.city}&specializationId=${this.specializationId}`).subscribe({
       next: (response) => {
-        this.doctors.set(response);
-        this.errorMessage.set('');
+        if (this.minRating > 0) {
+          this.doctors.set(response.filter(d => d.rating >= this.minRating));
+        } else {
+          this.doctors.set(response);
+        }
+        if (this.doctors().length == 0) {
+          this.errorMessage.set('No doctors found matching your criteria.');
+        }
       },
       error: () => {
         this.errorMessage.set('No doctors found.');
@@ -56,11 +63,36 @@ export class DoctorSearchComponent {
     };
 
     this.http.post(`${this.apiUrl}/Rating`, rating, { responseType: 'text' }).subscribe({
-      next: (response: any) => {
+      next: () => {
         alert('Rating submitted successfully!');
       },
       error: (err: any) => {
         alert('Could not submit rating: ' + err.error);
+      }
+    });
+  }
+
+  updateRating() {
+    if (this.ratingValue < 1 || this.ratingValue > 5) {
+      this.errorMessage.set('Rating must be between 1 and 5.');
+      return;
+    }
+
+    this.errorMessage.set('');
+    this.successMessage.set('');
+
+    const rating = {
+      doctorId: this.ratingDoctorId,
+      userId: this.ratingUserId,
+      ratingScore: this.ratingValue
+    };
+
+    this.http.put(`${this.apiUrl}/Rating`, rating, { responseType: 'text' }).subscribe({
+      next: () => {
+        alert('Rating updated successfully!');
+      },
+      error: (err: any) => {
+        alert('Could not update rating: ' + err.error);
       }
     });
   }

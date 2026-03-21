@@ -14,6 +14,11 @@
           <input type="number" class="form-control" [(ngModel)]="specializationId" placeholder="Enter specialization id" />
         </div>
 
+        <div class="mb-3">
+          <label>Minimum Rating (0 = show all)</label>
+          <input type="number" class="form-control" [(ngModel)]="minRating" placeholder="Enter minimum rating 0 to 5" min="0" max="5" />
+        </div>
+
         <button class="btn btn-primary w-100" (click)="search()">Search</button>
 
         <p style="color:red" class="mt-2">{{errorMessage()}}</p>
@@ -51,7 +56,10 @@
           <input type="number" class="form-control" [(ngModel)]="ratingValue" placeholder="Enter rating 1 to 5" min="1" max="5" />
         </div>
 
-        <button class="btn btn-success w-100" (click)="submitRating()">Submit Rating</button>
+        <div class="d-flex gap-2">
+          <button class="btn btn-success w-100" (click)="submitRating()">Submit Rating</button>
+          <button class="btn btn-warning w-100" (click)="updateRating()">Update Rating</button>
+        </div>
       </div>
     </div>
   </div>
