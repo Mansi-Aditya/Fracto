@@ -4,6 +4,7 @@
   <p style="color: green;">{{successMessage()}}</p>
   <p style="color: red;">{{errorMessage()}}</p>
 
+  <!-- Users Table -->
   <h5>All Users</h5>
   <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
     <tr style="background: #cce5ff;">
@@ -26,8 +27,9 @@
     }
   </table>
 
+  <!-- Appointments Table -->
   <h5>All Appointments</h5>
-  <table style="width: 100%; border-collapse: collapse;">
+  <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
     <tr style="background: #cce5ff;">
       <th style="border: 1px solid #ccc; padding: 8px;">ID</th>
       <th style="border: 1px solid #ccc; padding: 8px;">User ID</th>
@@ -52,4 +54,59 @@
       </tr>
     }
   </table>
+
+  <!-- Doctors Table -->
+  <h5>All Doctors</h5>
+  <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+    <tr style="background: #cce5ff;">
+      <th style="border: 1px solid #ccc; padding: 8px;">ID</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">Name</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">City</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">Specialization ID</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">Rating</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">Action</th>
+    </tr>
+    @for (doctor of doctors(); track doctor.doctorId) {
+      <tr>
+        <td style="border: 1px solid #ccc; padding: 8px;">{{doctor.doctorId}}</td>
+        <td style="border: 1px solid #ccc; padding: 8px;">{{doctor.name}}</td>
+        <td style="border: 1px solid #ccc; padding: 8px;">{{doctor.city}}</td>
+        <td style="border: 1px solid #ccc; padding: 8px;">{{doctor.specializationId}}</td>
+        <td style="border: 1px solid #ccc; padding: 8px;">{{doctor.rating}}</td>
+        <td style="border: 1px solid #ccc; padding: 8px;">
+          <button (click)="editDoctor(doctor)" style="background: blue; color: white; border: none; padding: 5px 10px; margin-right: 5px;">Edit</button>
+          <button (click)="deleteDoctor(doctor.doctorId)" style="background: red; color: white; border: none; padding: 5px 10px;">Delete</button>
+        </td>
+      </tr>
+    }
+  </table>
+
+  <!-- Add/Edit Doctor Form -->
+  <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+    <h5>{{isEditing() ? 'Edit Doctor' : 'Add New Doctor'}}</h5>
+
+    <div style="margin-bottom: 10px;">
+      <label>Name</label>
+      <input type="text" class="form-control" [(ngModel)]="doctorForm().name" placeholder="Doctor name" />
+    </div>
+
+    <div style="margin-bottom: 10px;">
+      <label>City</label>
+      <input type="text" class="form-control" [(ngModel)]="doctorForm().city" placeholder="City" />
+    </div>
+
+    <div style="margin-bottom: 10px;">
+      <label>Specialization ID</label>
+      <input type="number" class="form-control" [(ngModel)]="doctorForm().specializationId" placeholder="Specialization ID" />
+    </div>
+
+    <div style="display: flex; gap: 10px;">
+      <button (click)="saveDoctor()" style="background: green; color: white; border: none; padding: 8px 20px; border-radius: 4px;">
+        {{isEditing() ? 'Update Doctor' : 'Add Doctor'}}
+      </button>
+      @if (isEditing()) {
+        <button (click)="cancelEdit()" style="background: gray; color: white; border: none; padding: 8px 20px; border-radius: 4px;">Cancel</button>
+      }
+    </div>
+  </div>
 </div>
