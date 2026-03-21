@@ -1,25 +1,46 @@
-<div class="container">
-  <h2>Book Appointment</h2>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card p-4">
+        <h3 class="text-center mb-4">Book Appointment</h3>
 
-  <label>Doctor Name:</label>
-  <input type="text" placeholder="Doctor name" />
+        <div class="mb-3">
+          <label>Your User ID</label>
+          <input type="number" class="form-control" [(ngModel)]="userId" placeholder="Enter your user id" />
+        </div>
 
-  <br><br>
+        <div class="mb-3">
+          <label>Doctor ID</label>
+          <input type="number" class="form-control" [(ngModel)]="doctorId" placeholder="Enter doctor id" />
+        </div>
 
-  <label>Time Slot:</label>
-  <select>
-    <option>10:00 AM</option>
-    <option>11:00 AM</option>
-    <option>02:00 PM</option>
-    <option>04:00 PM</option>
-  </select>
+        <div class="mb-3">
+          <label>Date</label>
+          <input type="date" class="form-control" [(ngModel)]="appointmentDate" />
+        </div>
 
-  <br><br>
+        <button class="btn btn-secondary w-100 mb-3" (click)="getSlots()">
+          Check Available Slots
+        </button>
 
-  <label>Date:</label>
-  <input type="date" />
+        @if (availableSlots().length > 0) {
+          <div class="mb-3">
+            <label>Select Time Slot</label>
+            <select class="form-control" [(ngModel)]="timeSlot">
+              <option value="">-- Select a slot --</option>
+              @for (slot of availableSlots(); track slot) {
+                <option [value]="slot">{{slot}}</option>
+              }
+            </select>
+          </div>
+          <button class="btn btn-primary w-100" (click)="bookAppointment()">
+            Book Appointment
+          </button>
+        }
 
-  <br><br>
-
-  <button>Book Appointment</button>
+        <p style="color:red" class="mt-2">{{errorMessage()}}</p>
+        <p style="color:green" class="mt-2">{{successMessage()}}</p>
+      </div>
+    </div>
+  </div>
 </div>

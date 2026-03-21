@@ -8,7 +8,7 @@
         public DateTime AppointmentDate { get; set; }
         public string TimeSlot { get; set; }
         public string Status { get; set; }
-        public User User { get; set; }
-        public Doctor Doctor { get; set; }
+        public User? User { get; set; }
+        public Doctor? Doctor { get; set; }
     }
 }
