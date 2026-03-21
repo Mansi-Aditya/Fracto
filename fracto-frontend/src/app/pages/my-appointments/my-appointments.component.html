@@ -1,0 +1,53 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card p-4">
+        <h3 class="text-center mb-4">My Appointments</h3>
+
+        <div class="mb-3">
+          <label>Your User ID</label>
+          <input type="number" class="form-control" [(ngModel)]="userId" placeholder="Enter your user id" />
+        </div>
+
+        <button class="btn btn-primary w-100 mb-3" (click)="getAppointments()">
+          View My Appointments
+        </button>
+
+        <p style="color:red">{{errorMessage()}}</p>
+        <p style="color:green">{{successMessage()}}</p>
+
+        @if (appointments().length > 0) {
+          <table style="width: 100%; border-collapse: collapse;">
+            <tr style="background: #cce5ff;">
+              <th style="border: 1px solid #ccc; padding: 8px;">ID</th>
+              <th style="border: 1px solid #ccc; padding: 8px;">Doctor ID</th>
+              <th style="border: 1px solid #ccc; padding: 8px;">Date</th>
+              <th style="border: 1px solid #ccc; padding: 8px;">Time</th>
+              <th style="border: 1px solid #ccc; padding: 8px;">Status</th>
+              <th style="border: 1px solid #ccc; padding: 8px;">Action</th>
+            </tr>
+            @for (apt of appointments(); track apt.appointmentId) {
+              <tr>
+                <td style="border: 1px solid #ccc; padding: 8px;">{{apt.appointmentId}}</td>
+                <td style="border: 1px solid #ccc; padding: 8px;">{{apt.doctorId}}</td>
+                <td style="border: 1px solid #ccc; padding: 8px;">{{apt.appointmentDate | date}}</td>
+                <td style="border: 1px solid #ccc; padding: 8px;">{{apt.timeSlot}}</td>
+                <td style="border: 1px solid #ccc; padding: 8px;">{{apt.status}}</td>
+                <td style="border: 1px solid #ccc; padding: 8px;">
+                  @if (apt.status !== 'Cancelled') {
+                    <button (click)="cancelAppointment(apt.appointmentId)"
+                      style="background: red; color: white; border: none; padding: 5px 10px;">
+                      Cancel
+                    </button>
+                  } @else {
+                    <span style="color: gray;">Cancelled</span>
+                  }
+                </td>
+              </tr>
+            }
+          </table>
+        }
+      </div>
+    </div>
+  </div>
+</div>
