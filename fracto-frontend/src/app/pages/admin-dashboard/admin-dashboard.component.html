@@ -21,7 +21,8 @@
         <td style="border: 1px solid #ccc; padding: 8px;">{{user.email}}</td>
         <td style="border: 1px solid #ccc; padding: 8px;">{{user.role}}</td>
         <td style="border: 1px solid #ccc; padding: 8px;">
-          <button (click)="deleteUser(user.userId)" style="background: red; color: white; border: none; padding: 5px 10px;">Delete</button>
+          <button (click)="deleteUser(user.userId)"
+            style="background: red; color: white; border: none; padding: 5px 10px;">Delete</button>
         </td>
       </tr>
     }
@@ -48,8 +49,10 @@
         <td style="border: 1px solid #ccc; padding: 8px;">{{apt.timeSlot}}</td>
         <td style="border: 1px solid #ccc; padding: 8px;">{{apt.status}}</td>
         <td style="border: 1px solid #ccc; padding: 8px;">
-          <button (click)="confirmAppointment(apt.appointmentId)" style="background: green; color: white; border: none; padding: 5px 10px; margin-right: 5px;">Confirm</button>
-          <button (click)="cancelAppointment(apt.appointmentId)" style="background: red; color: white; border: none; padding: 5px 10px;">Cancel</button>
+          <button (click)="confirmAppointment(apt.appointmentId)"
+            style="background: green; color: white; border: none; padding: 5px 10px; margin-right: 5px;">Confirm</button>
+          <button (click)="cancelAppointment(apt.appointmentId)"
+            style="background: red; color: white; border: none; padding: 5px 10px;">Cancel</button>
         </td>
       </tr>
     }
@@ -74,39 +77,85 @@
         <td style="border: 1px solid #ccc; padding: 8px;">{{doctor.specializationId}}</td>
         <td style="border: 1px solid #ccc; padding: 8px;">{{doctor.rating}}</td>
         <td style="border: 1px solid #ccc; padding: 8px;">
-          <button (click)="editDoctor(doctor)" style="background: blue; color: white; border: none; padding: 5px 10px; margin-right: 5px;">Edit</button>
-          <button (click)="deleteDoctor(doctor.doctorId)" style="background: red; color: white; border: none; padding: 5px 10px;">Delete</button>
+          <button (click)="editDoctor(doctor)"
+            style="background: blue; color: white; border: none; padding: 5px 10px; margin-right: 5px;">Edit</button>
+          <button (click)="deleteDoctor(doctor.doctorId)"
+            style="background: red; color: white; border: none; padding: 5px 10px;">Delete</button>
         </td>
       </tr>
     }
   </table>
 
   <!-- Add/Edit Doctor Form -->
-  <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+  <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
     <h5>{{isEditing() ? 'Edit Doctor' : 'Add New Doctor'}}</h5>
 
     <div style="margin-bottom: 10px;">
       <label>Name</label>
-      <input type="text" class="form-control" [(ngModel)]="doctorForm().name" placeholder="Doctor name" />
+      <input type="text" class="form-control" [ngModel]="doctorForm().name"
+        (ngModelChange)="doctorForm.set({name: $event, city: doctorForm().city, specializationId: doctorForm().specializationId})"
+        placeholder="Doctor name" />
     </div>
 
     <div style="margin-bottom: 10px;">
       <label>City</label>
-      <input type="text" class="form-control" [(ngModel)]="doctorForm().city" placeholder="City" />
+      <input type="text" class="form-control" [ngModel]="doctorForm().city"
+        (ngModelChange)="doctorForm.set({name: doctorForm().name, city: $event, specializationId: doctorForm().specializationId})"
+        placeholder="City" />
     </div>
 
     <div style="margin-bottom: 10px;">
       <label>Specialization ID</label>
-      <input type="number" class="form-control" [(ngModel)]="doctorForm().specializationId" placeholder="Specialization ID" />
+      <input type="number" class="form-control" [ngModel]="doctorForm().specializationId"
+        (ngModelChange)="doctorForm.set({name: doctorForm().name, city: doctorForm().city, specializationId: $event})"
+        placeholder="Specialization ID" />
     </div>
 
     <div style="display: flex; gap: 10px;">
-      <button (click)="saveDoctor()" style="background: green; color: white; border: none; padding: 8px 20px; border-radius: 4px;">
+      <button (click)="saveDoctor()"
+        style="background: green; color: white; border: none; padding: 8px 20px; border-radius: 4px;">
         {{isEditing() ? 'Update Doctor' : 'Add Doctor'}}
       </button>
       @if (isEditing()) {
-        <button (click)="cancelEdit()" style="background: gray; color: white; border: none; padding: 8px 20px; border-radius: 4px;">Cancel</button>
+        <button (click)="cancelEdit()"
+          style="background: gray; color: white; border: none; padding: 8px 20px; border-radius: 4px;">Cancel</button>
       }
     </div>
   </div>
+
+  <!-- Specializations Table -->
+  <h5>All Specializations</h5>
+  <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+    <tr style="background: #cce5ff;">
+      <th style="border: 1px solid #ccc; padding: 8px;">ID</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">Name</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">Action</th>
+    </tr>
+    @for (spec of specializations(); track spec.specializationId) {
+      <tr>
+        <td style="border: 1px solid #ccc; padding: 8px;">{{spec.specializationId}}</td>
+        <td style="border: 1px solid #ccc; padding: 8px;">{{spec.specializationName}}</td>
+        <td style="border: 1px solid #ccc; padding: 8px;">
+          <button (click)="deleteSpecialization(spec.specializationId)"
+            style="background: red; color: white; border: none; padding: 5px 10px;">Delete</button>
+        </td>
+      </tr>
+    }
+  </table>
+
+  <!-- Add Specialization Form -->
+  <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+    <h5>Add New Specialization</h5>
+    <div style="margin-bottom: 10px;">
+      <label>Specialization Name</label>
+      <input type="text" class="form-control" [ngModel]="newSpecialization()"
+        (ngModelChange)="newSpecialization.set($event)"
+        placeholder="Enter specialization name" />
+    </div>
+    <button (click)="addSpecialization()"
+      style="background: green; color: white; border: none; padding: 8px 20px; border-radius: 4px;">
+      Add Specialization
+    </button>
+  </div>
+
 </div>

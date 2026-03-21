@@ -15,10 +15,12 @@ export class AdminDashboardComponent implements OnInit {
   users = signal<any[]>([]);
   appointments = signal<any[]>([]);
   doctors = signal<any[]>([]);
+  specializations = signal<any[]>([]);
   successMessage = signal('');
   errorMessage = signal('');
   isEditing = signal(false);
   editingDoctorId = signal(0);
+  newSpecialization = signal('');
 
   doctorForm = signal({
     name: '',
@@ -33,6 +35,7 @@ export class AdminDashboardComponent implements OnInit {
     this.loadUsers();
     this.loadAppointments();
     this.loadDoctors();
+    this.loadSpecializations();
   }
 
   loadUsers() {
@@ -53,6 +56,13 @@ export class AdminDashboardComponent implements OnInit {
     this.http.get<any[]>(`${this.apiUrl}/Doctor`).subscribe({
       next: (response) => { this.doctors.set(response); },
       error: () => { this.errorMessage.set('Could not load doctors.'); }
+    });
+  }
+
+  loadSpecializations() {
+    this.http.get<any[]>(`${this.apiUrl}/Specialization`).subscribe({
+      next: (response) => { this.specializations.set(response); },
+      error: () => { this.errorMessage.set('Could not load specializations.'); }
     });
   }
 
@@ -138,6 +148,33 @@ export class AdminDashboardComponent implements OnInit {
         this.loadDoctors();
       },
       error: () => { this.errorMessage.set('Could not delete doctor.'); }
+    });
+  }
+
+  addSpecialization() {
+    if (this.newSpecialization() == '') {
+      this.errorMessage.set('Specialization name is required.');
+      return;
+    }
+
+    const spec = { specializationName: this.newSpecialization() };
+    this.http.post(`${this.apiUrl}/Specialization`, spec, { responseType: 'text' }).subscribe({
+      next: () => {
+        this.successMessage.set('Specialization added successfully.');
+        this.newSpecialization.set('');
+        this.loadSpecializations();
+      },
+      error: () => { this.errorMessage.set('Could not add specialization.'); }
+    });
+  }
+
+  deleteSpecialization(id: number) {
+    this.http.delete(`${this.apiUrl}/Specialization/${id}`, { responseType: 'text' }).subscribe({
+      next: () => {
+        this.successMessage.set('Specialization deleted successfully.');
+        this.loadSpecializations();
+      },
+      error: () => { this.errorMessage.set('Could not delete specialization.'); }
     });
   }
 }
