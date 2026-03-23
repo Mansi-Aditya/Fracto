@@ -340,8 +340,8 @@
         "IsRequired": true
       },
       {
-        "Name": "user",
-        "Type": "Fracto.API.Models.User",
+        "Name": "userDto",
+        "Type": "Fracto.API.Models.UpdateUserDto",
         "IsRequired": true
       }
     ],

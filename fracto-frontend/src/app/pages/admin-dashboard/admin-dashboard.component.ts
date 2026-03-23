@@ -20,13 +20,12 @@ export class AdminDashboardComponent implements OnInit {
   errorMessage = signal('');
   isEditing = signal(false);
   editingDoctorId = signal(0);
+  isEditingUser = signal(false);
+  editingUserId = signal(0);
   newSpecialization = signal('');
 
-  doctorForm = signal({
-    name: '',
-    city: '',
-    specializationId: 0
-  });
+  doctorForm = signal({ name: '', city: '', specializationId: 0 });
+  userForm = signal({ username: '', email: '', role: '' });
 
   private http = inject(HttpClient);
   private apiUrl = 'https://localhost:7096/api';
@@ -73,6 +72,39 @@ export class AdminDashboardComponent implements OnInit {
         this.loadUsers();
       },
       error: () => { this.errorMessage.set('Could not delete user.'); }
+    });
+  }
+
+  editUser(user: any) {
+    this.isEditingUser.set(true);
+    this.editingUserId.set(user.userId);
+    this.userForm.set({
+      username: user.username,
+      email: user.email,
+      role: user.role
+    });
+  }
+
+  cancelEditUser() {
+    this.isEditingUser.set(false);
+    this.editingUserId.set(0);
+    this.userForm.set({ username: '', email: '', role: '' });
+  }
+
+  saveUser() {
+    if (this.userForm().username == '') {
+      this.errorMessage.set('Username is required.');
+      return;
+    }
+
+    this.http.put(`${this.apiUrl}/User/${this.editingUserId()}`,
+      this.userForm(), { responseType: 'text' }).subscribe({
+      next: () => {
+        this.successMessage.set('User updated successfully.');
+        this.cancelEditUser();
+        this.loadUsers();
+      },
+      error: () => { this.errorMessage.set('Could not update user.'); }
     });
   }
 

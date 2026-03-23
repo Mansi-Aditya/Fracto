@@ -64,10 +64,10 @@ export class DoctorSearchComponent {
 
     this.http.post(`${this.apiUrl}/Rating`, rating, { responseType: 'text' }).subscribe({
       next: () => {
-        alert('Rating submitted successfully!');
+        this.successMessage.set('Rating submitted successfully!');
       },
       error: (err: any) => {
-        alert('Could not submit rating: ' + err.error);
+        this.errorMessage.set('Could not submit rating. You may have already rated this doctor.');
       }
     });
   }
@@ -89,10 +89,10 @@ export class DoctorSearchComponent {
 
     this.http.put(`${this.apiUrl}/Rating`, rating, { responseType: 'text' }).subscribe({
       next: () => {
-        alert('Rating updated successfully!');
+        this.successMessage.set('Rating updated successfully!');
       },
       error: (err: any) => {
-        alert('Could not update rating: ' + err.error);
+        this.errorMessage.set('Could not update rating. You may not have rated this doctor yet.');
       }
     });
   }

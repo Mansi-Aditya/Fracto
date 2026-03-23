@@ -34,7 +34,7 @@ export class BookAppointmentComponent {
     }
 
     this.errorMessage.set('');
-
+    // this took me a while to figure out
     const formattedDate = new Date(this.appointmentDate).toISOString().split('T')[0];
 
     this.http.get<any[]>(

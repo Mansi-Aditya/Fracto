@@ -6,7 +6,7 @@
 
   <!-- Users Table -->
   <h5>All Users</h5>
-  <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
+  <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
     <tr style="background: #cce5ff;">
       <th style="border: 1px solid #ccc; padding: 8px;">ID</th>
       <th style="border: 1px solid #ccc; padding: 8px;">Username</th>
@@ -21,12 +21,47 @@
         <td style="border: 1px solid #ccc; padding: 8px;">{{user.email}}</td>
         <td style="border: 1px solid #ccc; padding: 8px;">{{user.role}}</td>
         <td style="border: 1px solid #ccc; padding: 8px;">
+          <button (click)="editUser(user)"
+            style="background: blue; color: white; border: none; padding: 5px 10px; margin-right: 5px;">Edit</button>
           <button (click)="deleteUser(user.userId)"
             style="background: red; color: white; border: none; padding: 5px 10px;">Delete</button>
         </td>
       </tr>
     }
   </table>
+
+  <!-- Edit User Form -->
+  @if (isEditingUser()) {
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+      <h5>Edit User</h5>
+      <div style="margin-bottom: 10px;">
+        <label>Username</label>
+        <input type="text" class="form-control" [ngModel]="userForm().username"
+          (ngModelChange)="userForm.set({username: $event, email: userForm().email, role: userForm().role})"
+          placeholder="Username" />
+      </div>
+      <div style="margin-bottom: 10px;">
+        <label>Email</label>
+        <input type="email" class="form-control" [ngModel]="userForm().email"
+          (ngModelChange)="userForm.set({username: userForm().username, email: $event, role: userForm().role})"
+          placeholder="Email" />
+      </div>
+      <div style="margin-bottom: 10px;">
+        <label>Role</label>
+        <select class="form-control" [ngModel]="userForm().role"
+          (ngModelChange)="userForm.set({username: userForm().username, email: userForm().email, role: $event})">
+          <option value="User">User</option>
+          <option value="Admin">Admin</option>
+        </select>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <button (click)="saveUser()"
+          style="background: green; color: white; border: none; padding: 8px 20px; border-radius: 4px;">Save User</button>
+        <button (click)="cancelEditUser()"
+          style="background: gray; color: white; border: none; padding: 8px 20px; border-radius: 4px;">Cancel</button>
+      </div>
+    </div>
+  }
 
   <!-- Appointments Table -->
   <h5>All Appointments</h5>

@@ -62,16 +62,18 @@ namespace Fracto.API.Controllers
                 return NotFound("User not found.");
             return Ok(user);
         }
-
+        // updated user method 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(int id, User user)
+        public async Task<IActionResult> UpdateUser(int id, UpdateUserDto userDto)
         {
             var existingUser = await _context.Users.FindAsync(id);
             if (existingUser == null)
                 return NotFound("User not found.");
-            existingUser.Username = user.Username;
-            existingUser.Email = user.Email;
-            existingUser.Role = user.Role;
+
+            existingUser.Username = userDto.Username;
+            existingUser.Email = userDto.Email;
+            existingUser.Role = userDto.Role;
+
             await _context.SaveChangesAsync();
             return Ok("User updated successfully.");
         }
